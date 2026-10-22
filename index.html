@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cái Nữa Hong</title>
+<meta name="theme-color" content="#F5F8EC">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Cái Nữa Hong">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+  html, body { margin: 0; height: 100%; background: #F5F8EC; overflow: hidden; }
+  /* Chừa chỗ cho tai thỏ / thanh trạng thái khi mở từ màn hình chính */
+  .shell { position: fixed; inset: 0; box-sizing: border-box;
+           padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+  iframe { display: block; width: 100%; height: 100%; border: 0; background: #F5F8EC; }
+  .splash { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 14px; background: #F5F8EC; color: #66725A; text-align: center; padding: 24px; box-sizing: border-box;
+            font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; transition: opacity .3s; }
+  .splash img { width: 128px; height: 128px; border-radius: 28px; }
+  .splash.hide { opacity: 0; pointer-events: none; }
+  @media (prefers-reduced-motion: reduce) { .splash { transition: none; } }
+</style>
+</head>
+<body>
+<div class="shell"><iframe id="app" title="Cái Nữa Hong" allow="clipboard-write"></iframe></div>
+<div class="splash" id="splash"><img src="icon-192.png" alt=""><div id="msg">Đang mở app…</div></div>
+<script>
+  // Link ứng dụng web (Apps Script). Đổi link thì sửa dòng dưới, giữ nguyên hai dấu nháy đơn.
+  const APP_URL = 'https://script.google.com/macros/s/AKfycbzbhbsgYHQHGOIUU6gtN0aCQYEyeW75O6rbpGftGSQxJ4PDhk_Op7iYjBev13RqNSJAuA/exec';
+
+  const frame = document.getElementById('app');
+  const splash = document.getElementById('splash');
+  const msg = document.getElementById('msg');
+  const valid = /^https:\/\/script\.google\.com\/(a\/[^/]+\/)?macros\/s\/[^/]+\/exec/.test(APP_URL);
+
+  if (!valid) {
+    msg.innerHTML = 'Chưa có link app.<br>Mở file index.html, dán link ứng dụng web (đuôi /exec) vào dòng APP_URL.';
+  } else if (!navigator.onLine) {
+    msg.textContent = 'Không có mạng. Kiểm tra wifi hoặc 4G rồi mở lại app.';
+    window.addEventListener('online', () => location.reload());
+  } else {
+    frame.src = APP_URL;
+    frame.addEventListener('load', () => setTimeout(() => splash.classList.add('hide'), 400));
+    setTimeout(() => splash.classList.add('hide'), 12000);   // phòng khi trình duyệt không báo đã tải xong
+  }
+
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+</body>
+</html>

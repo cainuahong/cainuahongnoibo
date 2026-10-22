@@ -1,0 +1,16 @@
+{
+  "name": "Cái Nữa Hong",
+  "short_name": "Cái Nữa Hong",
+  "description": "Nhập đơn, sản xuất, kiểm kê – Cái Nữa Hong Homebake",
+  "lang": "vi",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F5F8EC",
+  "theme_color": "#F5F8EC",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

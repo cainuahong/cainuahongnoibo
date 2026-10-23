@@ -2,55 +2,65 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cái Nữa Hong</title>
 <meta name="theme-color" content="#F5F8EC">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Cái Nữa Hong">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
+<script>
+  // Link ứng dụng web (Apps Script). Đổi link thì sửa dòng dưới, giữ nguyên hai dấu nháy đơn.
+  var APP_URL = 'https://script.google.com/macros/s/AKfycbzbhbsgYHQHGOIUU6gtN0aCQYEyeW75O6rbpGftGSQxJ4PDhk_Op7iYjBev13RqNSJAuA/exec';
+
+  // Mở từ icon trên màn hình chính (địa chỉ có ?app=1): vào thẳng app, chạy y như mở bằng Safari.
+  // Không lồng app vào trang này nữa, vì ở chế độ màn hình chính iPhone chặn bớt app bị lồng (camera, đăng nhập).
+  if (/[?&]app=1(&|$)/.test(location.search) && /^https:\/\/script\.google\.com\//.test(APP_URL)) {
+    location.replace(APP_URL);
+  }
+</script>
 <style>
-  html, body { margin: 0; height: 100%; background: #F5F8EC; overflow: hidden; }
-  /* Chừa chỗ cho tai thỏ / thanh trạng thái khi mở từ màn hình chính */
-  .shell { position: fixed; inset: 0; box-sizing: border-box;
-           padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
-  iframe { display: block; width: 100%; height: 100%; border: 0; background: #F5F8EC; }
-  .splash { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 14px; background: #F5F8EC; color: #66725A; text-align: center; padding: 24px; box-sizing: border-box;
-            font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; transition: opacity .3s; }
-  .splash img { width: 128px; height: 128px; border-radius: 28px; }
-  .splash.hide { opacity: 0; pointer-events: none; }
-  @media (prefers-reduced-motion: reduce) { .splash { transition: none; } }
+  :root { --bg: #F5F8EC; --ink: #1F2A14; --muted: #66725A; --line: #DCE4C8; --olive: #3D5A12; color-scheme: light; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink);
+               font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 420px; margin: 0 auto; padding: 48px 20px 40px; text-align: center; }
+  img { width: 128px; height: 128px; border-radius: 28px; }
+  h1 { font-size: 28px; margin: 14px 0 4px; letter-spacing: -.02em; }
+  p { margin: 0 0 12px; color: var(--muted); }
+  .btn { display: block; margin: 22px 0 30px; padding: 15px 20px; border-radius: 14px; background: var(--olive);
+         color: #fff; font-weight: 600; font-size: 17px; text-decoration: none; }
+  .btn:focus-visible { outline: 3px solid #9FC236; outline-offset: 2px; }
+  .how { text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; }
+  .how h2 { font-size: 16px; margin: 0 0 8px; }
+  .how p { color: var(--ink); font-size: 15px; }
+  .how .small { color: var(--muted); font-size: 13.5px; margin: 0; }
 </style>
 </head>
 <body>
-<div class="shell"><iframe id="app" title="Cái Nữa Hong" allow="clipboard-write"></iframe></div>
-<div class="splash" id="splash"><img src="icon-192.png" alt=""><div id="msg">Đang mở app…</div></div>
+<main>
+  <img src="icon-192.png" alt="">
+  <h1>Cái Nữa Hong</h1>
+  <p>App nội bộ: nhập đơn, sản xuất, kiểm kê, chấm công.</p>
+  <a class="btn" id="open" href="#">Mở app</a>
+  <section class="how">
+    <h2>Thêm vào màn hình chính</h2>
+    <p><b>iPhone:</b> mở trang này bằng Safari, bấm nút Chia sẻ, chọn <b>Thêm vào MH chính</b>.</p>
+    <p><b>Android:</b> mở bằng Chrome, bấm nút ⋮, chọn <b>Thêm vào màn hình chính</b>.</p>
+    <p class="small">Bấm icon chú bánh trên màn hình chính là vào thẳng app.</p>
+  </section>
+</main>
 <script>
-  // Link ứng dụng web (Apps Script). Đổi link thì sửa dòng dưới, giữ nguyên hai dấu nháy đơn.
-  const APP_URL = 'https://script.google.com/macros/s/AKfycbzbhbsgYHQHGOIUU6gtN0aCQYEyeW75O6rbpGftGSQxJ4PDhk_Op7iYjBev13RqNSJAuA/exec';
-
-  const frame = document.getElementById('app');
-  const splash = document.getElementById('splash');
-  const msg = document.getElementById('msg');
-  const valid = /^https:\/\/script\.google\.com\/(a\/[^/]+\/)?macros\/s\/[^/]+\/exec/.test(APP_URL);
-
-  if (!valid) {
-    msg.innerHTML = 'Chưa có link app.<br>Mở file index.html, dán link ứng dụng web (đuôi /exec) vào dòng APP_URL.';
-  } else if (!navigator.onLine) {
-    msg.textContent = 'Không có mạng. Kiểm tra wifi hoặc 4G rồi mở lại app.';
-    window.addEventListener('online', () => location.reload());
-  } else {
-    frame.src = APP_URL;
-    frame.addEventListener('load', () => setTimeout(() => splash.classList.add('hide'), 400));
-    setTimeout(() => splash.classList.add('hide'), 12000);   // phòng khi trình duyệt không báo đã tải xong
+  document.getElementById('open').href = APP_URL;
+  // Gắn ?app=1 vào địa chỉ trang, để icon thêm vào màn hình chính mở thẳng app
+  if (!/[?&]app=1(&|$)/.test(location.search)) {
+    history.replaceState(null, '', location.pathname + '?app=1');
   }
-
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+  // Gỡ bộ nhớ đệm (service worker) của bản trước, không còn cần nữa
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function (rs) { rs.forEach(function (r) { r.unregister(); }); }).catch(function () {});
+  }
 </script>
 </body>
 </html>
